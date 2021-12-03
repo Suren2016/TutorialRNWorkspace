@@ -6,47 +6,94 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, { useState } from 'react';
 import {
-  SafeAreaView,
+  Button,
+  FlatList,
   ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
-  useColorScheme,
+  TextInput,
   View,
 } from 'react-native';
 
-import {
-  Colors,
-} from 'react-native/Libraries/NewAppScreen';
-
-
-
 const App = () => {
-  const isDarkMode = useColorScheme() === 'dark';
+  const [enteredGoal, setEnteredGoal] = useState('');
+  const [courseGoals, setCourseGoals] = useState([]);
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  const goalInputHandler = enteredText => {
+    setEnteredGoal(enteredText);
+  };
+
+  const addGoalHandler = () => {
+    !!enteredGoal &&
+      setCourseGoals(currentGoals => [
+        ...currentGoals,
+        { key: Math.random().toString(), value: enteredGoal },
+      ]);
   };
 
   return (
-    <>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <View style={styles.main}>
-        <Text>HELLO Suren</Text>
+    <View style={styles.screen}>
+      <View style={styles.inputContainer}>
+        {/* <Text>HELLO Suren</Text> */}
+        <TextInput
+          placeholder={'enter'}
+          style={styles.input}
+          onChangeText={goalInputHandler}
+          value={enteredGoal}
+        />
+        <Button title="ADD" onPress={addGoalHandler} />
       </View>
-      
-    </>
+      {/* <ScrollView style={styles.scrolling}>
+        {courseGoals.map(goal => (
+          <View style={styles.listItem} key={goal}>
+            <Text>{goal}</Text>
+          </View>
+        ))}
+      </ScrollView> */}
+      <FlatList
+        data={courseGoals}
+        renderItem={itemData => (
+          <View style={styles.listItem} key={itemData.item.key}>
+            <Text>{itemData.item.value}</Text>
+          </View>
+        )}
+      />
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  main: {
+  screen: {
     flex: 1,
-    justifyContent: 'center',
+  },
+  inputContainer: {
+    // flex: 1,
+    marginTop: 50,
+    justifyContent: 'space-around',
+    flexDirection: 'row',
     alignItems: 'center',
-  }
+    paddingHorizontal: 40,
+  },
+  input: {
+    borderBottomColor: 'black',
+    borderWidth: 0.5,
+    padding: 10,
+    width: '80%',
+  },
+  listItem: {
+    marginHorizontal: 24,
+    marginVertical: 8,
+    borderWidth: 1,
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    backgroundColor: 'lightgray',
+  },
+  scrolling: {
+    // marginVertical: 0,
+    // paddingVertical: 16,
+  },
 });
 
 export default App;
