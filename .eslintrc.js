@@ -8,6 +8,7 @@ module.exports = {
     'react-native/no-color-literals': 0,
     'no-console': 0,
     'no-alert': 0,
+    'react/self-closing-comp': 0,
   },
 };
 
