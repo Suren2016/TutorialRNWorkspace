@@ -8,6 +8,8 @@ module.exports = {
     'react-native/no-color-literals': 0,
     'no-console': 0,
     'no-alert': 0,
+    'react/self-closing-comp': 0,
+    'react-hooks/exhaustive-deps': 0,
   },
 };
 
@@ -54,4 +56,6 @@ module.exports = {
 //     "react/wrap-multilines": 2,
 //     "semi": 2,
 //     "space-before-blocks": ["error", { "functions": "always", "keywords": "always", "classes": "always" }]
+//  "react-hooks/rules-of-hooks": 'error',
+//  "react-hooks/exhaustive-deps": 'warn'
 //   },
