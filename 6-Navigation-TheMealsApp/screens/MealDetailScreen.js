@@ -1,24 +1,49 @@
 import React from 'react';
-import { View, Text, StyleSheet, Button, TouchableOpacity } from 'react-native';
-import { HeaderButtons, Item } from 'react-navigation-header-buttons';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  ScrollView,
+  Image,
+} from 'react-native';
 
 import { MEALS } from '../data/dummy-data';
-import HeaderButton from '../components/HeaderButton';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Colors from '../constants/Colors';
+
+const ListItem = props => {
+  return (
+    <View style={styles.listItem}>
+      <Text>{props.children}</Text>
+    </View>
+  );
+};
 
 const MealDetailScreen = props => {
   const mealId = props.navigation.getParam('mealId');
 
   const selectedMeal = MEALS.find(meal => meal.id === mealId);
 
-  console.log('selectedMeal - ', selectedMeal);
-
   return (
-    <View style={styles.container}>
-      <Text>{selectedMeal.title}</Text>
-      <Button title="Go Back" onPress={() => props.navigation.popToTop()} />
-    </View>
+    <ScrollView>
+      <Image source={{ uri: selectedMeal.imageUrl }} style={styles.image} />
+      <View style={styles.details}>
+        <Text>{selectedMeal.duration}m</Text>
+        <Text>{selectedMeal.complexity.toUpperCase()}</Text>
+        <Text>{selectedMeal.affordability.toUpperCase()}</Text>
+      </View>
+
+      <Text style={styles.title}>Ingredients</Text>
+      {selectedMeal.ingredients.map(ingredient => {
+        return <ListItem key={ingredient}>{ingredient}</ListItem>;
+      })}
+
+      <Text style={styles.title}>Steps</Text>
+      {selectedMeal.steps.map(step => (
+        <ListItem key={step}>{step}</ListItem>
+      ))}
+    </ScrollView>
   );
 };
 
@@ -29,15 +54,6 @@ MealDetailScreen.navigationOptions = navigationData => {
   return {
     headerTitle: selectedMeal.title,
     headerRight: () => (
-      // <HeaderButtons HeaderButtonComponent={HeaderButton}>
-      //   <Item
-      //     title="F"
-      //     iconName="ios-star"
-      //     onPress={() => {
-      //       console.log('Item pressed');
-      //     }}
-      //   />
-      // </HeaderButtons>
       <TouchableOpacity
         style={styles.icon}
         onPress={() => {
@@ -50,13 +66,31 @@ MealDetailScreen.navigationOptions = navigationData => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+  image: {
+    width: '100%',
+    height: 200,
+    justifyContent: 'flex-end',
+  },
+  details: {
+    flexDirection: 'row',
+    padding: 15,
+    justifyContent: 'space-around',
   },
   icon: {
     marginRight: 12,
+  },
+  title: {
+    marginTop: 15,
+    fontWeight: '700',
+    fontSize: 20,
+    textAlign: 'center',
+  },
+  listItem: {
+    marginVertical: 10,
+    marginHorizontal: 20,
+    borderColor: '#ccc',
+    borderWidth: 1,
+    padding: 10,
   },
 });
 

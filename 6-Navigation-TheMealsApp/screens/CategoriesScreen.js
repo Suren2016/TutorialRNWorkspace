@@ -1,14 +1,10 @@
 import React from 'react';
-import {
-  Text,
-  StyleSheet,
-  FlatList,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import { StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 
 import { CATEGORIES } from '../data/dummy-data';
 import CategoryGridTile from '../components/CategoryGridTile';
+
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const CategoriesScreen = props => {
   const renderGridItem = itemData => {
@@ -36,16 +32,28 @@ const CategoriesScreen = props => {
   );
 };
 
-CategoriesScreen.navigationOptions = {
-  headerTitle: 'Meal Categories',
+CategoriesScreen.navigationOptions = navData => {
+  return {
+    headerTitle: 'Meal Categories',
+    headerLeft: () => (
+      <TouchableOpacity
+        style={styles.icon}
+        onPress={() => {
+          console.log('Left-icon pressed');
+          navData.navigation.toggleDrawer();
+        }}>
+        <Ionicons name="menu-outline" size={25} />
+      </TouchableOpacity>
+    ),
+  };
 };
 
 const styles = StyleSheet.create({
   screen: {
     flexGrow: 1,
-    // margin: 24,
-    // borderWidth: 1,
-    // padding: 20,
+  },
+  icon: {
+    marginLeft: 12,
   },
 });
 
