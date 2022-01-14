@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useCallback } from 'react';
 import {
   View,
   Text,
@@ -7,6 +7,9 @@ import {
   ScrollView,
   Image,
 } from 'react-native';
+
+import { useSelector, useDispatch } from 'react-redux';
+import { toggleFavorite } from '../../7-state-redux/store/actions/meals';
 
 import { MEALS } from '../data/dummy-data';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -21,9 +24,21 @@ const ListItem = props => {
 };
 
 const MealDetailScreen = props => {
+  const availableMeals = useSelector(state => state.meals.meals);
   const mealId = props.navigation.getParam('mealId');
 
-  const selectedMeal = MEALS.find(meal => meal.id === mealId);
+  const selectedMeal = availableMeals.find(meal => meal.id === mealId);
+
+  const dispatch = useDispatch();
+
+  const toggleFavoriteHandler = useCallback(() => {
+    dispatch(toggleFavorite(mealId));
+  }, [dispatch, mealId]);
+
+  useEffect(() => {
+    // props.navigation.setParams({ mealTitle: selectedMeal.title });
+    props.navigation.setParams({ toggleFav: toggleFavoriteHandler });
+  }, [toggleFavoriteHandler]);
 
   return (
     <ScrollView>
@@ -48,17 +63,15 @@ const MealDetailScreen = props => {
 };
 
 MealDetailScreen.navigationOptions = navigationData => {
-  const mealId = navigationData.navigation.getParam('mealId');
+  // const mealId = navigationData.navigation.getParam('mealId');
+  const mealTitle = navigationData.navigation.getParam('mealTitle');
+  const toggleFav = navigationData.navigation.setParams('toggleFav');
+  // const selectedMeal = MEALS.find(meal => meal.id === mealId);
 
-  const selectedMeal = MEALS.find(meal => meal.id === mealId);
   return {
-    headerTitle: selectedMeal.title,
+    headerTitle: mealTitle,
     headerRight: () => (
-      <TouchableOpacity
-        style={styles.icon}
-        onPress={() => {
-          console.log('Item pressed');
-        }}>
+      <TouchableOpacity style={styles.icon} onPress={toggleFav}>
         <Ionicons name="star-outline" size={25} color={Colors.accentColor} />
       </TouchableOpacity>
     ),
