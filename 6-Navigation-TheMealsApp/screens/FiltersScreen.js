@@ -8,6 +8,9 @@ import {
   Platform,
 } from 'react-native';
 
+import { useDispatch } from 'react-redux';
+import { setFilter } from '../../7-state-redux/store/actions/meals';
+
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Colors from '../constants/Colors';
 
@@ -31,6 +34,8 @@ const FiltersScreen = props => {
   const [isVegan, setIsVegan] = useState(false);
   const [isVegetarian, setIsVegetarian] = useState(false);
 
+  const dispatch = useDispatch();
+
   const saveFilters = useCallback(() => {
     const appliedFilters = {
       glutenFree: isGlutenFree,
@@ -39,7 +44,7 @@ const FiltersScreen = props => {
       isVegeterian: isVegetarian,
     };
 
-    console.log('appliedFilters - ', appliedFilters);
+    dispatch(setFilter(appliedFilters));
   }, [isGlutenFree, isLactosFree, isVegan, isVegetarian]);
 
   useEffect(() => {
@@ -80,7 +85,6 @@ FiltersScreen.navigationOptions = navData => {
       <TouchableOpacity
         style={styles.icon}
         onPress={() => {
-          console.log('Left-icon pressed');
           navData.navigation.toggleDrawer();
         }}>
         <Ionicons name="menu-outline" size={25} />

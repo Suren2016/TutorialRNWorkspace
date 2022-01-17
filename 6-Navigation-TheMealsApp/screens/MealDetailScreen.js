@@ -11,7 +11,6 @@ import {
 import { useSelector, useDispatch } from 'react-redux';
 import { toggleFavorite } from '../../7-state-redux/store/actions/meals';
 
-import { MEALS } from '../data/dummy-data';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Colors from '../constants/Colors';
 
@@ -26,6 +25,9 @@ const ListItem = props => {
 const MealDetailScreen = props => {
   const availableMeals = useSelector(state => state.meals.meals);
   const mealId = props.navigation.getParam('mealId');
+  const currentMealIsFavorite = useSelector(state =>
+    state.meals.favoriteMeals.some(meal => meal.id === mealId),
+  );
 
   const selectedMeal = availableMeals.find(meal => meal.id === mealId);
 
@@ -36,9 +38,12 @@ const MealDetailScreen = props => {
   }, [dispatch, mealId]);
 
   useEffect(() => {
-    // props.navigation.setParams({ mealTitle: selectedMeal.title });
     props.navigation.setParams({ toggleFav: toggleFavoriteHandler });
   }, [toggleFavoriteHandler]);
+
+  useEffect(() => {
+    props.navigation.setParams({ isFav: currentMealIsFavorite });
+  }, [currentMealIsFavorite]);
 
   return (
     <ScrollView>
@@ -63,16 +68,19 @@ const MealDetailScreen = props => {
 };
 
 MealDetailScreen.navigationOptions = navigationData => {
-  // const mealId = navigationData.navigation.getParam('mealId');
   const mealTitle = navigationData.navigation.getParam('mealTitle');
-  const toggleFav = navigationData.navigation.setParams('toggleFav');
-  // const selectedMeal = MEALS.find(meal => meal.id === mealId);
+  const toggleFav = navigationData.navigation.getParam('toggleFav');
+  const isFavorite = navigationData.navigation.getParam('isFav');
 
   return {
     headerTitle: mealTitle,
     headerRight: () => (
       <TouchableOpacity style={styles.icon} onPress={toggleFav}>
-        <Ionicons name="star-outline" size={25} color={Colors.accentColor} />
+        <Ionicons
+          name={isFavorite ? 'star' : 'star-outline'}
+          size={25}
+          color={Colors.accentColor}
+        />
       </TouchableOpacity>
     ),
   };
