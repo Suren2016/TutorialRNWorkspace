@@ -1,12 +1,16 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { FlatList, TouchableOpacity, StyleSheet } from 'react-native';
 
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import ProductItem from '../../components/shop/ProductItem';
+import * as cartActions from '../../store/actions/cart';
+import Colors from '../../constants/Colors';
 
 const ProductsOverviewScreen = props => {
   const products = useSelector(state => state.products.availableProducts);
+  const dispatch = useDispatch();
 
   return (
     <FlatList
@@ -23,23 +27,32 @@ const ProductsOverviewScreen = props => {
               productTitle: itemData.item.title,
             });
           }}
-          onAddToCart={() => {}}
+          onAddToCart={() => {
+            dispatch(cartActions.addToCart(itemData.item));
+          }}
         />
       )}
     />
   );
 };
 
-ProductsOverviewScreen.navigationOptions = {
-  headerTitle: 'All Products',
+ProductsOverviewScreen.navigationOptions = navData => {
+  return {
+    headerTitle: 'All Products',
+    headerRight: () => (
+      <TouchableOpacity
+        style={styles.icon}
+        onPress={() => navData.navigation.navigate('Cart')}>
+        <Ionicons name={'cart-outline'} size={22} color={Colors.primary} />
+      </TouchableOpacity>
+    ),
+  };
 };
 
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//   },
-// });
+const styles = StyleSheet.create({
+  icon: {
+    marginRight: 12,
+  },
+});
 
 export default ProductsOverviewScreen;
