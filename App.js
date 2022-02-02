@@ -12,6 +12,7 @@ import { Provider } from 'react-redux';
 // import mealsReducer from './7-state-redux/store/reducers/meals';
 import productsReducer from './8-TheShop-App/store/reducers/products';
 import cartReducer from './8-TheShop-App/store/reducers/cart';
+import orderReducer from './8-TheShop-App/store/reducers/orders';
 
 // import GuessNumberApp from './4-GuessNumber/GuessNumberApp';
 // import TheMealsApp from './6-Navigation-TheMealsApp/TheMealsApp';
@@ -26,6 +27,7 @@ import TheShopApp from './8-TheShop-App/TheShopApp';
 const rootReducer = combineReducers({
   products: productsReducer,
   cart: cartReducer,
+  orders: orderReducer,
 });
 
 const store = createStore(rootReducer);

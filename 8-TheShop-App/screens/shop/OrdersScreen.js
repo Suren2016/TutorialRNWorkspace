@@ -1,19 +1,43 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { TouchableOpacity, Text, StyleSheet, FlatList } from 'react-native';
 
-const OrdersScreen = () => {
+import { useSelector } from 'react-redux';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import Colors from '../../constants/Colors';
+
+const OrdersScreen = props => {
+  const orders = useSelector(state => state.orders.orders);
+
+  console.log('orders - ', orders);
+
   return (
-    <View style={styles.container}>
-      <Text>Orders Screen</Text>
-    </View>
+    <FlatList
+      data={orders}
+      keyExtractor={item => item.id}
+      renderItem={itemData => <Text>{itemData.item.totalAmount}</Text>}
+    />
   );
 };
 
+OrdersScreen.navigationOptions = navData => {
+  return {
+    headerTitle: 'Your Orders',
+    headerLeft: () => (
+      <TouchableOpacity
+        style={styles.icon}
+        onPress={() => {
+          console.log('Left-icon pressed');
+          navData.navigation.toggleDrawer();
+        }}>
+        <Ionicons name="menu-outline" size={25} color={Colors.primary} />
+      </TouchableOpacity>
+    ),
+  };
+};
+
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+  icon: {
+    marginLeft: 12,
   },
 });
 

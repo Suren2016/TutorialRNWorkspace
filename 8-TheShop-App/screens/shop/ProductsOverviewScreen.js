@@ -39,6 +39,16 @@ const ProductsOverviewScreen = props => {
 ProductsOverviewScreen.navigationOptions = navData => {
   return {
     headerTitle: 'All Products',
+    headerLeft: () => (
+      <TouchableOpacity
+        style={styles.iconLeft}
+        onPress={() => {
+          console.log('Left-icon pressed');
+          navData.navigation.toggleDrawer();
+        }}>
+        <Ionicons name="menu-outline" size={25} color={Colors.primary} />
+      </TouchableOpacity>
+    ),
     headerRight: () => (
       <TouchableOpacity
         style={styles.icon}
@@ -52,6 +62,9 @@ ProductsOverviewScreen.navigationOptions = navData => {
 const styles = StyleSheet.create({
   icon: {
     marginRight: 12,
+  },
+  iconLeft: {
+    marginLeft: 12,
   },
 });
 
