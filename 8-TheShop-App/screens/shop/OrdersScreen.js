@@ -4,6 +4,7 @@ import { TouchableOpacity, Text, StyleSheet, FlatList } from 'react-native';
 import { useSelector } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Colors from '../../constants/Colors';
+import OrderItem from '../../components/shop/OrderItem';
 
 const OrdersScreen = props => {
   const orders = useSelector(state => state.orders.orders);
@@ -14,7 +15,13 @@ const OrdersScreen = props => {
     <FlatList
       data={orders}
       keyExtractor={item => item.id}
-      renderItem={itemData => <Text>{itemData.item.totalAmount}</Text>}
+      renderItem={itemData => (
+        <OrderItem
+          amount={itemData.item.totalAmount}
+          date={itemData.item.readableDate}
+          items={itemData.item.items}
+        />
+      )}
     />
   );
 };

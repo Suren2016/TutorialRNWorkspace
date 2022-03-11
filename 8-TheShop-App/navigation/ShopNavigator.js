@@ -11,6 +11,7 @@ import ProductsOverviewScreen from '../screens/shop/ProductsOverviewScreen';
 import ProductDetailScreen from '../screens/shop/ProductDetailScreen';
 import CartScreen from '../screens/shop/CartScreen';
 import OrdersScreen from '../screens/shop/OrdersScreen';
+import UserProductsScreen from '../screens/user/UserProductsScreen';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
@@ -55,10 +56,27 @@ const OrdersNavigator = createStackNavigator(
   },
 );
 
+const AdminNavigator = createStackNavigator(
+  {
+    UserProducts: UserProductsScreen,
+  },
+  {
+    navigationOptions: {
+      drawerIcon: drawerConfig => {
+        return (
+          <Ionicons name="create-outline" size={23} color={Colors.primary} />
+        );
+      },
+    },
+    defaultNavigationOptions: defaultNavOptions,
+  },
+);
+
 const ShopNavigator = createDrawerNavigator(
   {
     Products: ProductsNavigator,
     Orders: OrdersNavigator,
+    Admin: AdminNavigator,
   },
   {
     cntentOptions: {
