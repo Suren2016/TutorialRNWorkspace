@@ -1,12 +1,11 @@
-import React, { useCallback, useEffect, useState, useReducer } from 'react';
+import React, { useCallback, useEffect, useReducer } from 'react';
 import {
   View,
-  Text,
   StyleSheet,
   ScrollView,
-  TextInput,
   TouchableOpacity,
   Alert,
+  KeyboardAvoidingView,
 } from 'react-native';
 
 import { useSelector, useDispatch } from 'react-redux';
@@ -14,6 +13,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import * as productsActions from '../../store/actions/products';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Colors from '../../constants/Colors';
+import Input from '../../components/UI/Input';
 
 const FORM_INPUT_UPDATE = 'FORM_INPUT_UPDATE';
 
@@ -63,16 +63,6 @@ const EditProductScreen = props => {
     formIsValid: editedProduct ? true : false,
   });
 
-  // const [title, setTitle] = useState(editedProduct ? editedProduct.title : '');
-  // const [titleIsValid, setTitleIsValid] = useState(false);
-  // const [imageUrl, setImageUrl] = useState(
-  //   editedProduct ? editedProduct.imageUrl : '',
-  // );
-  // const [price, setPrice] = useState('');
-  // const [description, setDescription] = useState(
-  //   editedProduct ? editedProduct.description : '',
-  // );
-
   const submitHandler = useCallback(() => {
     if (!formState.formIsValid) {
       Alert.alert('Wrong input!', 'Please check the errors int the form.', [
@@ -106,73 +96,81 @@ const EditProductScreen = props => {
     props.navigation.setParams({ submit: submitHandler });
   }, [submitHandler]);
 
-  const textChangeHandler = (inputIdentifier, text) => {
-    let isValid = false;
-    if (text.trim().length > 0) {
-      // setTitleIsValid(false);
-      isValid = true;
-    }
-    // setTitle(text);
-    dispatchFormState({
-      type: FORM_INPUT_UPDATE,
-      value: text,
-      isValid: isValid,
-      input: inputIdentifier,
-    });
-  };
+  const inputChangeHandler = useCallback(
+    (inputIdentifier, inputValue, inputValidity) => {
+      dispatchFormState({
+        type: FORM_INPUT_UPDATE,
+        value: inputValue,
+        isValid: inputValidity,
+        input: inputIdentifier,
+      });
+    },
+    [dispatchFormState],
+  );
 
   return (
-    <ScrollView>
-      <View style={styles.form}>
-        <View style={styles.container}>
-          <Text style={styles.label}>Title</Text>
-          <TextInput
-            style={styles.input}
-            value={formState.inputValues.title}
-            onChangeText={t => textChangeHandler('title', t)}
+    <KeyboardAvoidingView
+      behavior="padding"
+      keyboardVerticalOffset={100}
+      style={{ flex: 1 }}>
+      <ScrollView>
+        <View style={styles.form}>
+          <Input
+            id="title"
+            label="Title"
+            errorText="Please enter a valid title!"
             keyboardType="default"
             autoCapitalize="sentences"
             autoCorrect
             returnKeyType="next"
-            onEndEditing={() => console.log('onEditing')}
-            onSubmitEditing={() => console.log('onSubmitEditing')}
+            onInputChange={inputChangeHandler}
+            initialValue={editedProduct ? editedProduct.title : ''}
+            initiallyValid={!!editedProduct}
+            required
           />
-          {!formState.inputValues.title && (
-            <Text>Please enter a valid title</Text>
-          )}
-        </View>
-
-        <View style={styles.container}>
-          <Text style={styles.label}>Image URL</Text>
-          <TextInput
-            style={styles.input}
-            value={formState.inputValues.imageUrl}
-            onChangeText={t => textChangeHandler('imageUrl', t)}
+          <Input
+            id="imageUrl"
+            label="Image Url"
+            errorText="Please enter a valid image Url!"
+            keyboardType="default"
+            returnKeyType="next"
+            initialValue={editedProduct ? editedProduct.imageUrl : ''}
+            initiallyValid={!!editedProduct}
+            onInputChange={inputChangeHandler}
+            required
+            min={0.1}
           />
-        </View>
 
-        {editedProduct ? null : (
-          <View style={styles.container}>
-            <Text style={styles.label}>Price</Text>
-            <TextInput
-              style={styles.input}
-              value={formState.inputValues.price}
-              onChangeText={textChangeHandler.bind(this, 'price')}
+          {editedProduct ? null : (
+            <Input
+              id="price"
+              label="Price"
+              errorText="Please enter a valid price!"
               keyboardType="decimal-pad"
+              onInputChange={inputChangeHandler}
+              returnKeyType="next"
+              required
             />
-          </View>
-        )}
+          )}
 
-        <View style={styles.container}>
-          <Text style={styles.label}>Description</Text>
-          <TextInput
-            style={styles.input}
-            value={formState.inputValues.description}
-            onChangeText={textChangeHandler.bind(this, 'description')}
+          <Input
+            id="description"
+            label="Description"
+            errorText="Please enter a valid description!"
+            keyboardType="default"
+            onInputChange={inputChangeHandler}
+            autoCapitalize="sentences"
+            autoCorrect
+            multiline
+            numbersOfLines={3}
+            initialValue={editedProduct ? editedProduct.description : ''}
+            initiallyValid={!!editedProduct}
+            required
+            minLength={5}
           />
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -192,26 +190,8 @@ EditProductScreen.navigationOptions = navData => {
 };
 
 const styles = StyleSheet.create({
-  container: {
-    // flex: 1,
-    // justifyContent: 'center',
-    // alignItems: 'center',
-  },
   form: {
     margin: 20,
-  },
-  formControl: {
-    width: '100%',
-  },
-  input: {
-    paddingHorizontal: 2,
-    paddingVertical: 5,
-    borderBottomColor: '#ccc',
-    borderBottomWidth: 1,
-  },
-  label: {
-    fontWeight: '700',
-    marginVertical: 8,
   },
   icon: {
     marginRight: 12,
