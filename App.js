@@ -5,9 +5,10 @@
  */
 
 import React from 'react';
-import { createStore, combineReducers } from 'redux';
+import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 // import { composeWithDevTools } from 'redux-devtools-extension'; // this is for only DEVS
+import ReduxThunk from 'redux-thunk'
 
 // import mealsReducer from './7-state-redux/store/reducers/meals';
 import productsReducer from './8-TheShop-App/store/reducers/products';
@@ -30,7 +31,7 @@ const rootReducer = combineReducers({
   orders: orderReducer,
 });
 
-const store = createStore(rootReducer);
+const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
 
 const App = () => {
   return (
