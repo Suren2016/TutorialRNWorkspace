@@ -1,32 +1,46 @@
-import React from 'react';
-import { TouchableOpacity, Text, StyleSheet, FlatList } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { TouchableOpacity, Text, StyleSheet, FlatList, ActivityIndicator, View } from 'react-native';
 
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import Colors from '../../constants/Colors';
 import OrderItem from '../../components/shop/OrderItem';
+import * as ordersActions from '../../store/actions/orders';
 
-const OrdersScreen = props => {
-  const orders = useSelector(state => state.orders.orders);
+const OrdersScreen = (props) => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(undefined);
 
-  console.log('orders - ', orders);
+  const orders = useSelector((state) => state.orders.orders);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    setIsLoading(true);
+    dispatch(ordersActions.fetchOrders()).then(() => {
+      setIsLoading(false);
+    });
+  }, [dispatch]);
+
+  if (isLoading) {
+    return (
+      <View style={styles.indicatorContainer}>
+        <ActivityIndicator size="large" color={Colors.primary} />
+      </View>
+    );
+  }
 
   return (
     <FlatList
       data={orders}
-      keyExtractor={item => item.id}
-      renderItem={itemData => (
-        <OrderItem
-          amount={itemData.item.totalAmount}
-          date={itemData.item.readableDate}
-          items={itemData.item.items}
-        />
+      keyExtractor={(item) => item.id}
+      renderItem={(itemData) => (
+        <OrderItem amount={itemData.item.totalAmount} date={itemData.item.readableDate} items={itemData.item.items} />
       )}
     />
   );
 };
 
-OrdersScreen.navigationOptions = navData => {
+OrdersScreen.navigationOptions = (navData) => {
   return {
     headerTitle: 'Your Orders',
     headerLeft: () => (
@@ -45,6 +59,11 @@ OrdersScreen.navigationOptions = navData => {
 const styles = StyleSheet.create({
   icon: {
     marginLeft: 12,
+  },
+  indicatorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 
