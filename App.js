@@ -8,12 +8,13 @@ import React from 'react';
 import { createStore, combineReducers, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 // import { composeWithDevTools } from 'redux-devtools-extension'; // this is for only DEVS
-import ReduxThunk from 'redux-thunk'
+import ReduxThunk from 'redux-thunk';
 
 // import mealsReducer from './7-state-redux/store/reducers/meals';
 import productsReducer from './8-TheShop-App/store/reducers/products';
 import cartReducer from './8-TheShop-App/store/reducers/cart';
 import orderReducer from './8-TheShop-App/store/reducers/orders';
+import authReducer from './8-TheShop-App/store/reducers/auth';
 
 // import GuessNumberApp from './4-GuessNumber/GuessNumberApp';
 // import TheMealsApp from './6-Navigation-TheMealsApp/TheMealsApp';
@@ -29,6 +30,7 @@ const rootReducer = combineReducers({
   products: productsReducer,
   cart: cartReducer,
   orders: orderReducer,
+  auth: authReducer,
 });
 
 const store = createStore(rootReducer, applyMiddleware(ReduxThunk));
