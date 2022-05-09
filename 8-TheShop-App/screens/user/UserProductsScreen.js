@@ -1,11 +1,5 @@
 import React from 'react';
-import {
-  Button,
-  TouchableOpacity,
-  StyleSheet,
-  FlatList,
-  Alert,
-} from 'react-native';
+import { Button, TouchableOpacity, StyleSheet, FlatList, Alert, View, Text } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 
 import ProductItem from '../../components/shop/ProductItem';
@@ -14,15 +8,15 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import * as productsAction from '../../store/actions/products';
 import EditProductScreen from './EditProductScreen';
 
-const UserProductsScreen = props => {
-  const userProducts = useSelector(state => state.products.userProducts);
+const UserProductsScreen = (props) => {
+  const userProducts = useSelector((state) => state.products.userProducts);
   const dispatch = useDispatch();
 
-  const editProductHandler = id => {
+  const editProductHandler = (id) => {
     props.navigation.navigate('EditProduct', { productId: id });
   };
 
-  const deleteHandler = id => {
+  const deleteHandler = (id) => {
     Alert.alert('Are you sure?', 'Do you really want to delete this item?', [
       { text: 'No', style: 'default' },
       {
@@ -35,11 +29,19 @@ const UserProductsScreen = props => {
     ]);
   };
 
+  if (userProducts.length === 0) {
+    return (
+      <View style={styles.length}>
+        <Text>No products found, maybe created some ?</Text>
+      </View>
+    );
+  }
+
   return (
     <FlatList
       data={userProducts}
-      keyExtractor={item => item.id}
-      renderItem={itemData => (
+      keyExtractor={(item) => item.id}
+      renderItem={(itemData) => (
         <ProductItem
           image={itemData.item.imageUrl}
           title={itemData.item.title}
@@ -55,11 +57,7 @@ const UserProductsScreen = props => {
                 editProductHandler(itemData.item.id);
               }}
             />
-            <Button
-              color={Colors.primary}
-              title="Delete"
-              onPress={() => deleteHandler(itemData.item.id)}
-            />
+            <Button color={Colors.primary} title="Delete" onPress={() => deleteHandler(itemData.item.id)} />
           </>
         </ProductItem>
       )}
@@ -67,7 +65,7 @@ const UserProductsScreen = props => {
   );
 };
 
-UserProductsScreen.navigationOptions = navData => {
+UserProductsScreen.navigationOptions = (navData) => {
   return {
     headerLeft: () => (
       <TouchableOpacity
@@ -80,9 +78,7 @@ UserProductsScreen.navigationOptions = navData => {
       </TouchableOpacity>
     ),
     headerRight: () => (
-      <TouchableOpacity
-        style={styles.icon}
-        onPress={() => navData.navigation.navigate('EditProduct')}>
+      <TouchableOpacity style={styles.icon} onPress={() => navData.navigation.navigate('EditProduct')}>
         <Ionicons name={'create-outline'} size={22} color={Colors.primary} />
       </TouchableOpacity>
     ),
@@ -100,6 +96,11 @@ const styles = StyleSheet.create({
   },
   icon: {
     marginRight: 12,
+  },
+  length: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });
 

@@ -29,6 +29,14 @@ const OrdersScreen = (props) => {
     );
   }
 
+  if (orders.length === 0) {
+    return (
+      <View style={styles.length}>
+        <Text>No orders found, maybe ordering some products ?</Text>
+      </View>
+    );
+  }
+
   return (
     <FlatList
       data={orders}
@@ -61,6 +69,11 @@ const styles = StyleSheet.create({
     marginLeft: 12,
   },
   indicatorContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  length: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
