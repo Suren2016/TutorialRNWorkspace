@@ -1,9 +1,10 @@
 import React from 'react';
-import { Platform } from 'react-native';
+import { Platform, SafeAreaView, Button, View } from 'react-native';
 
 import { createAppContainer, createSwitchNavigator } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
-import { createDrawerNavigator } from 'react-navigation-drawer';
+import { createDrawerNavigator, DrawerItems } from 'react-navigation-drawer';
+import { useDispatch } from 'react-redux';
 
 import Colors from '../constants/Colors';
 
@@ -14,8 +15,10 @@ import OrdersScreen from '../screens/shop/OrdersScreen';
 import UserProductsScreen from '../screens/user/UserProductsScreen';
 import EditProductScreen from '../screens/user/EditProductScreen';
 import AuthScreen from '../screens/user/AuthScreen';
+import StartupScreen from '../screens/user/StartupScreen';
 
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import * as authactions from '../store/actions/auth';
 
 const defaultNavOptions = {
   headerStyle: {
@@ -76,8 +79,28 @@ const ShopNavigator = createDrawerNavigator(
     Admin: AdminNavigator,
   },
   {
-    cntentOptions: {
+    contentOptions: {
       activeTintColor: Colors.primary,
+    },
+    contentComponent: (props) => {
+      const dispatch = useDispatch();
+      return (
+        <View style={{ flex: 1, paddingTop: 20 }}>
+          <SafeAreaView forceInset={{ top: 'always', horizontal: 'never' }}>
+            <DrawerItems {...props} />
+            <View>
+              <Button
+                title="Logout"
+                color={Colors.primary}
+                onPress={() => {
+                  dispatch(authactions.logout());
+                  // props.navigation.navigate('Auth');
+                }}
+              />
+            </View>
+          </SafeAreaView>
+        </View>
+      );
     },
   },
 );
@@ -92,6 +115,7 @@ const AuthNavigator = createStackNavigator(
 );
 
 const MainNavigator = createSwitchNavigator({
+  Startup: StartupScreen,
   Auth: AuthNavigator,
   Shop: ShopNavigator,
 });
