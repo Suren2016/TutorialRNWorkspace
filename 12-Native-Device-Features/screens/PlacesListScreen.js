@@ -43,7 +43,7 @@ PlacesListScreen.navigationOptions = (navData) => {
           console.log('Right-icon pressed');
           navData.navigation.navigate('NewPlace');
         }}>
-        <Ionicons name="add" size={25} color={Colors.primary} />
+        <Ionicons name="add-outline" size={25} color="black" />
       </TouchableOpacity>
     ),
   };
