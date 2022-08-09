@@ -35,14 +35,14 @@ const ProductsOverviewScreen = (props) => {
   }, [dispatch, loadedProducts]);
 
   useEffect(() => {
-    const willFocusSub = props.navigation.addListener('willFocus', () => {
+    const unsubscribe = props.navigation.addListener('focus', () => {
       loadedProducts();
     });
 
     return () => {
-      willFocusSub.remove();
+      unsubscribe();
     };
-  }, [loadedProducts, props.navigation]);
+  }, [loadedProducts]);
 
   const selectItemHendler = (id, title) => {
     props.navigation.navigate('ProductDetail', {
@@ -111,7 +111,7 @@ const ProductsOverviewScreen = (props) => {
   );
 };
 
-ProductsOverviewScreen.navigationOptions = (navData) => {
+export const screenOptions = (navData) => {
   return {
     headerTitle: 'All Products',
     headerLeft: () => (

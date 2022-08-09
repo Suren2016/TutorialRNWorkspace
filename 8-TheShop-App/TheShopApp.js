@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import NavigationContainer from './navigation/NavigationContainer';
+import AppNavigator from './navigation/AppNavigator';
 
 import ProductsOverviewScreen from './screens/shop/ProductsOverviewScreen';
 
@@ -8,7 +8,7 @@ const TheShopApp = () => {
   return (
     <View style={styles.container}>
       {/* <ProductsOverviewScreen /> */}
-      <NavigationContainer />
+      <AppNavigator />
     </View>
   );
 };

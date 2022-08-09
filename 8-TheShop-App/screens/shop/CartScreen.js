@@ -72,6 +72,10 @@ const CartScreen = (props) => {
   );
 };
 
+export const screenOptions = {
+  headerTitle: 'Your Cart',
+};
+
 const styles = StyleSheet.create({
   screen: {
     margin: 20,

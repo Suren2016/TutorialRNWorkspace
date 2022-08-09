@@ -1,21 +1,15 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  ScrollView,
-  Image,
-  Button,
-} from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image, Button } from 'react-native';
 
 import { useSelector, useDispatch } from 'react-redux';
 import Colors from '../../constants/Colors';
 import * as cartActions from '../../store/actions/cart';
 
-const ProductDetailScreen = props => {
-  const productId = props.navigation.getParam('productId');
-  const selectedProduct = useSelector(state =>
-    state.products.availableProducts.find(prod => prod.id === productId),
+const ProductDetailScreen = (props) => {
+  // const productId = props.navigation.getParam('productId'); // navigation 4
+  const productId = props.route.params.productId;
+  const selectedProduct = useSelector((state) =>
+    state.products.availableProducts.find((prod) => prod.id === productId),
   );
   const dispatch = useDispatch();
 
@@ -40,8 +34,9 @@ const ProductDetailScreen = props => {
   );
 };
 
-ProductDetailScreen.navigationOptions = navData => {
-  const productTitle = navData.navigation.getParam('productTitle');
+export const screenOptions = (navData) => {
+  // const productTitle = navData.navigation.getParam('productTitle'); // navigation 4
+  const productTitle = navData.route.params.productTitle; // navigation 5 and above
 
   return {
     headerTitle: productTitle,

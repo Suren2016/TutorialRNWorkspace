@@ -65,7 +65,7 @@ const UserProductsScreen = (props) => {
   );
 };
 
-UserProductsScreen.navigationOptions = (navData) => {
+export const screenOptions = (navData) => {
   return {
     headerLeft: () => (
       <TouchableOpacity

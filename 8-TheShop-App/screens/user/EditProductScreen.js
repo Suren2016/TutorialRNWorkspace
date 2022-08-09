@@ -44,7 +44,10 @@ const formReducer = (state, action) => {
 const EditProductScreen = (props) => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(undefined);
-  const prodId = props.navigation.getParam('productId');
+
+  // const prodId = props.navigation.getParam('productId'); // navigation 4
+  const prodId = props.route.params ? props.route.params.productId : null; // navigation 6
+
   const editedProduct = useSelector((state) => state.products.userProducts.find((prod) => prod.id === prodId));
   const dispatch = useDispatch();
 
@@ -106,7 +109,14 @@ const EditProductScreen = (props) => {
   }, [dispatch, prodId, formState]);
 
   useEffect(() => {
-    props.navigation.setParams({ submit: submitHandler });
+    // props.navigation.setParams({ submit: submitHandler }); // navigation 4
+    props.navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity style={styles.icon} onPress={submitHandler}>
+          <Ionicons name={'save'} size={22} color={Colors.primary} />
+        </TouchableOpacity>
+      ),
+    });
   }, [submitHandler]);
 
   const inputChangeHandler = useCallback(
@@ -192,16 +202,14 @@ const EditProductScreen = (props) => {
   );
 };
 
-EditProductScreen.navigationOptions = (navData) => {
-  const submitFn = navData.navigation.getParam('submit');
+export const screenOptions = (navData) => {
+  // const submitFn = navData.navigation.getParam('submit'); // navigation 4
+  // const submitFn = navData.route.params ? navData.route.params.submit : null; // navigation 6
 
+  const routeParams = navData.route.params ? navData.route.params : {};
   return {
-    headerTitle: navData.navigation.getParam('productId') ? 'Edit Product' : 'Add Product',
-    headerRight: () => (
-      <TouchableOpacity style={styles.icon} onPress={submitFn}>
-        <Ionicons name={'save'} size={22} color={Colors.primary} />
-      </TouchableOpacity>
-    ),
+    // headerTitle: navData.navigation.getParam('productId') ? 'Edit Product' : 'Add Product', // navigation 4
+    headerTitle: routeParams.productId ? 'Edit Product' : 'Add Product',
   };
 };
 
