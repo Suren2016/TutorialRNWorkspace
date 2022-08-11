@@ -15,10 +15,11 @@ import productsReducer from './8-TheShop-App/store/reducers/products';
 import cartReducer from './8-TheShop-App/store/reducers/cart';
 import orderReducer from './8-TheShop-App/store/reducers/orders';
 import authReducer from './8-TheShop-App/store/reducers/auth';
+import PushNotificationApp from './16-Push-Notification/PushNotificationApp';
 
 // import GuessNumberApp from './4-GuessNumber/GuessNumberApp';
 // import TheMealsApp from './6-Navigation-TheMealsApp/TheMealsApp';
-import TheShopApp from './8-TheShop-App/TheShopApp';
+// import TheShopApp from './8-TheShop-App/TheShopApp';
 // import NativeDeviceFeaturesApp from './12-Native-Device-Features/NativeDeviceFeaturesApp';
 // import placesReducer from './12-Native-Device-Features/store/places-reducer';
 
@@ -51,8 +52,9 @@ const App = () => {
     <Provider store={store}>
       {/* <GuessNumberApp /> */}
       {/* <TheMealsApp /> */}
-      <TheShopApp />
+      {/* <TheShopApp /> */}
       {/* <NativeDeviceFeaturesApp /> */}
+      <PushNotificationApp />
     </Provider>
   );
 };
